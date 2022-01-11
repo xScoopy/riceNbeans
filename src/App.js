@@ -21,7 +21,7 @@ const App = () => {
       }
     });
   };
-
+  // localStorage.clear();
   return (
     <div>
       <NewExpense onAddExpense={addExpenseHandler} />
