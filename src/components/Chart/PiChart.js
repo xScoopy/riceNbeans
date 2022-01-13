@@ -1,7 +1,88 @@
-import { PieChart, Pie } from "recharts";
+import { PieChart, Pie, Sector } from "recharts";
+import { useState, useCallback } from "react";
 
 const PiChart = (props) => {
-  console.log(props.data);
+  //animated pi functions adapted from https://codesandbox.io/s/pie-chart-with-customized-active-shape-y93si
+  const renderActiveShape = (props) => {
+    const RADIAN = Math.PI / 180;
+    const {
+      cx,
+      cy,
+      midAngle,
+      innerRadius,
+      outerRadius,
+      startAngle,
+      endAngle,
+      fill,
+      payload,
+      percent,
+      value,
+    } = props;
+    const sin = Math.sin(-RADIAN * midAngle);
+    const cos = Math.cos(-RADIAN * midAngle);
+    const sx = cx + (outerRadius + 10) * cos;
+    const sy = cy + (outerRadius + 10) * sin;
+    const mx = cx + (outerRadius + 30) * cos;
+    const my = cy + (outerRadius + 30) * sin;
+    const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+    const ey = my;
+    const textAnchor = cos >= 0 ? "start" : "end";
+
+    return (
+      <g>
+        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+          {payload.title}
+        </text>
+        <Sector
+          cx={cx}
+          cy={cy}
+          innerRadius={innerRadius}
+          outerRadius={outerRadius}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          fill={fill}
+        />
+        <Sector
+          cx={cx}
+          cy={cy}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          innerRadius={outerRadius + 6}
+          outerRadius={outerRadius + 10}
+          fill={fill}
+        />
+        <path
+          d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
+          stroke={fill}
+          fill="none"
+        />
+        <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
+        <text
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          textAnchor={textAnchor}
+          fill="white"
+        >{`Amount: $${value}`}</text>
+        <text
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          dy={18}
+          textAnchor={textAnchor}
+          fill="#999"
+        >
+          {`( ${(percent * 100).toFixed(2)}%)`}
+        </text>
+      </g>
+    );
+  };
+  const [activeIndex, setActiveIndex] = useState(0);
+  const onPieEnter = useCallback(
+    (_, index) => {
+      setActiveIndex(index);
+    },
+    [setActiveIndex]
+  );
+
   const data = props.data.map((dataPoint) => {
     return {
       title: dataPoint.title,
@@ -9,22 +90,19 @@ const PiChart = (props) => {
     };
   });
   return (
-    // <PieChart width={400} height={400}>
-    //   <Pie
-    //     data={props.data}
-    //     nameKey="title"
-    //     dataKey="amount"
-    //     outerRadius={100}
-    //     fill="#8884d8"
-    //   ></Pie>
-    // </PieChart>
-    <PieChart width={700} height={700}>
+    <PieChart width={500} height={500}>
       <Pie
+        activeIndex={activeIndex}
+        activeShape={renderActiveShape}
+        cx={250}
+        cy={250}
+        innerRadius={60}
+        outerRadius={80}
         data={data}
         nameKey="title"
         dataKey="amount"
-        outerRadius={250}
-        fill="#8884d8"
+        fill="#336699"
+        onMouseEnter={onPieEnter}
       />
     </PieChart>
   );
