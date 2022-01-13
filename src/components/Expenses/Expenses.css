@@ -9,3 +9,7 @@
   display: flex;
   flex-direction: row;
 }
+.Data-visuals {
+  display: flex;
+  flex-direction: column;
+}

@@ -6,6 +6,7 @@ import { useState } from "react";
 import ExpensesChart from "./ExpensesChart";
 import ExpensesMonths from "./ExpensesMonths";
 import PiChart from "../Chart/PiChart";
+import LineGraph from "../Chart/LineGraph";
 
 const Expenses = (props) => {
   const [filteredYear, setFilteredYear] = useState("2022");
@@ -54,7 +55,10 @@ const Expenses = (props) => {
           />
         </Card>
       </div>
-      <div>{filteredMonth !== "" && <PiChart data={monthlyExpenses} />}</div>
+      <div className="Data-visuals">
+        {filteredYear && <LineGraph data={filteredExpenses} />}
+        {filteredMonth !== "" && <PiChart data={monthlyExpenses} />}
+      </div>
     </div>
   );
 };
