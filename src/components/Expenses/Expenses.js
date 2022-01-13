@@ -5,6 +5,7 @@ import ExpensesFilter from "./ExpensesFilter";
 import { useState } from "react";
 import ExpensesChart from "./ExpensesChart";
 import ExpensesMonths from "./ExpensesMonths";
+import PiChart from "../Chart/PiChart";
 
 const Expenses = (props) => {
   const [filteredYear, setFilteredYear] = useState("2022");
@@ -36,21 +37,24 @@ const Expenses = (props) => {
   }
   console.log(filteredMonth);
   return (
-    <div>
-      <Card className="expenses">
-        <ExpensesFilter
-          selected={filteredYear}
-          onYearChange={filterChangeHandler}
-        />
-        <ExpensesChart expenses={filteredExpenses} />
-        <ExpensesMonths
-          selected={filteredMonth}
-          onMonthChange={monthChangeHandler}
-        />
-        <ExpensesList
-          items={filteredMonth !== "" ? monthlyExpenses : filteredExpenses}
-        />
-      </Card>
+    <div className="Expenses-wrapper">
+      <div>
+        <Card className="expenses">
+          <ExpensesFilter
+            selected={filteredYear}
+            onYearChange={filterChangeHandler}
+          />
+          <ExpensesChart expenses={filteredExpenses} />
+          <ExpensesMonths
+            selected={filteredMonth}
+            onMonthChange={monthChangeHandler}
+          />
+          <ExpensesList
+            items={filteredMonth !== "" ? monthlyExpenses : filteredExpenses}
+          />
+        </Card>
+      </div>
+      <div>{filteredMonth !== "" && <PiChart data={monthlyExpenses} />}</div>
     </div>
   );
 };
