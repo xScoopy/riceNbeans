@@ -5,7 +5,9 @@ This application is for personal use in handling a variety of expenses for post-
 ## How to Use
 
 Navigate to the Live URL, or follow steps below: 
+
 Live URL here: 
+
 1. Clone Repo
 2. npm install
 3. npm start
